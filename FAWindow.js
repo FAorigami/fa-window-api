@@ -1,12 +1,43 @@
 /**
- * FAWindow API
- * 複数ウィンドウの生成・管理・状態取得を行うライブラリ
+ * FAWindow API (Single File Version)
  */
 const FAWindow = {
     windows: {},
     highestZ: 1000,
 
+    // 1. CSSをJS内で定義し、自動適用する内部関数
+    _injectStyles: function() {
+        if (document.getElementById('fa-window-styles')) return; // 重複防止
+        const style = document.createElement('style');
+        style.id = 'fa-window-styles';
+        style.innerHTML = `
+            .fa-window {
+                position: absolute; min-width: 200px; min-height: 100px;
+                border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+                display: flex; flex-direction: column; resize: both;
+                overflow: hidden; z-index: 1000; font-family: sans-serif;
+            }
+            .fa-header {
+                padding: 10px 15px; cursor: move; display: flex;
+                justify-content: space-between; align-items: center;
+                user-select: none; font-weight: bold;
+            }
+            .fa-close-btn {
+                border: none; width: 26px; height: 26px; border-radius: 50%;
+                cursor: pointer; display: flex; align-items: center;
+                justify-content: center; font-size: 18px; padding: 0;
+                background: rgba(255,255,255,0.2); color: inherit;
+            }
+            .fa-close-btn:hover { background: rgba(255,255,255,0.4); }
+            .fa-body { padding: 15px; flex-grow: 1; overflow: auto; background: inherit; }
+        `;
+        document.head.appendChild(style);
+    },
+
+    // 2. メインの表示関数
     Show: function(id, x, y, headerColor, winColor, content) {
+        this._injectStyles(); // 最初にスタイルを注入
+
         if (this.windows[id]) this.Close(id);
 
         const win = document.createElement('div');
@@ -52,7 +83,7 @@ const FAWindow = {
             const key = el.name || el.id || 'unnamed';
             inputData[key] = el.value;
         });
-        return { id, html: body.innerHTML, values: inputData };
+        return { id, values: inputData, html: body.innerHTML };
     },
 
     _isLightColor: function(color) {
@@ -71,6 +102,7 @@ const FAWindow = {
             isDragging = true;
             offset.x = e.clientX - win.offsetLeft;
             offset.y = e.clientY - win.offsetTop;
+            win.style.zIndex = ++this.highestZ;
         };
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
