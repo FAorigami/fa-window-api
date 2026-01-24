@@ -1,7 +1,3 @@
-/**
- * FAWindow API - Argument Optimized Version
- */
-
 const FAWindow = {
     windows: {},
     highestZ: 1000,
@@ -167,5 +163,6 @@ const FAWindow = {
         };
     }
 };
+
 
 window.FAWindow = FAWindow;
