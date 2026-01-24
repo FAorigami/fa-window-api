@@ -7,12 +7,16 @@ JavaScriptで簡単に「動かせる・重なる・状態が取れる」ウィ�
 2. 以下のコードで表示：
 ```javascript
 FAWindow.Show(
-    'Settings',      // ID（タイトルバーにも表示されます）
+    'Settings',      // ID
+    'Title',         // タイル
     100,             // 初期位置 X (px)
     100,             // 初期位置 Y (px)
     '#2c3e50',       // ヘッダーの背景色
     '#ffffff',       // 本体の背景色
     '<div>設定内容をここに記述</div>' // コンテンツ (HTML可)
+    true(false),     // リサイズ
+    100,             // サイズ X (px)
+    100,             // サイズ Y (px)
 );
 ```
 
@@ -22,7 +26,7 @@ FAWindow.Show(
 const state = FAWindow.GetState('Settings');
 
 if (state) {
-    console.log(state.values); // { name属性(またはID): 入力値 }
+    console.log(state.values); // { ID: 入力値 }
     console.log(state.rect);   // { width, height, top, left ... }
     console.log(state.html);   // 現在のボディ内のHTML
 }
@@ -80,6 +84,6 @@ window.onload = () => {
             <button onclick="saveData()">保存</button>
         </div>
     `;
-    FAWindow.Show('UserForm', 50, 50, '#e67e22', '#fff', content);
+    FAWindow.Show('UserForm','ユーザーフォーム, 50, 50, '#e67e22', '#fff', content, true);
 };
 ```
