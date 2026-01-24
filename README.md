@@ -3,7 +3,7 @@
 JavaScriptで簡単に「動かせる・重なる・状態が取れる」ウィンドウを表示するAPIライブラリ。
 
 ## 使い方
-1. `https://cdn.jsdelivr.net/gh/FAorigami/fa-window-api/FAWindow.js`または`https://cdn.jsdelivr.net/gh/FAorigami/fa-window-api/FAWindow.js?v=001`、`https://cdn.jsdelivr.net/gh/FAorigami/fa-window-api@main/FAWindow.js`のどれかを読み込む。
+1. `https://cdn.jsdelivr.net/gh/FAorigami/fa-window-api/FAWindow.js`または`https://cdn.jsdelivr.net/gh/FAorigami/fa-window-api@latest/FAWindow.js`、`https://cdn.jsdelivr.net/gh/FAorigami/fa-window-api@main/FAWindow.js`のどれかを読み込む。
 2. 以下のコードで表示：
 ```javascript
 FAWindow.Show(
@@ -14,7 +14,7 @@ FAWindow.Show(
     '#2c3e50',       // ヘッダーの背景色
     '#ffffff',       // 本体の背景色
     '<div>設定内容をここに記述</div>' // コンテンツ (HTML可)
-    true(false),     // リサイズ
+    true(false),     // リサイズ(trueで禁止)
     100,             // サイズ X (px)
     100,             // サイズ Y (px)
 );
