@@ -3,7 +3,7 @@
 JavaScriptで簡単に「動かせる・重なる・状態が取れる」ウィンドウを表示するAPIライブラリ。
 
 ## 使い方
-1. `https://cdn.jsdelivr.net/gh/FAorigami/fa-window-api/FAWindow.js`を読み込む。
+1. `https://cdn.jsdelivr.net/gh/FAorigami/fa-window-api/FAWindow_0.1.1.js`を読み込む。
 2. 以下のコードで表示：
 ```javascript
 FAWindow.Show(
@@ -13,10 +13,10 @@ FAWindow.Show(
     100,             // 初期位置 Y (px)
     '#2c3e50',       // ヘッダーの背景色
     '#ffffff',       // 本体の背景色
-    '<div>設定内容をここに記述</div>' // コンテンツ (HTML可)
+    '<div>設定内容をここに記述</div>', // コンテンツ (HTML可、scriptは不可)
     true(false),     // リサイズ(trueで禁止)
     100,             // サイズ X (px)
-    100,             // サイズ Y (px)
+    100             // サイズ Y (px)
 );
 ```
 
@@ -55,7 +55,7 @@ Close        id                                            指定したIDのウ�
 .fa-close-btn: 閉じるボタン（×）
 ```
 
-## 実装例：フォームの処理
+## 実装例その1：フォームの処理
 ```
 /**
  * データの保存処理を行う関数
@@ -84,6 +84,60 @@ window.onload = () => {
             <button onclick="saveData()">保存</button>
         </div>
     `;
-    FAWindow.Show('UserForm','ユーザーフォーム, 50, 50, '#e67e22', '#fff', content, true);
+    FAWindow.Show('UserForm','ユーザーフォーム', 50, 50, '#e67e22', '#fff', content, true);
 };
+```
+
+## 実装例その2 : フォームをが開いた後から実行し始める
+```
+<button onclick="ShowForm()">フォームを表示</button>
+
+<script src="https://cdn.jsdelivr.net/gh/FAorigami/fa-window-api/FAWindow_0.1.1.js"></script>
+
+<script>
+    function ShowForm() {
+        // 遅延用
+        const sleep = ms => new Promise(res => setTimeout(res, ms));
+        const content = `
+            <button onclick="Run()">実行</button>
+            <div id="test1">フォーム表示時</div>
+            <div id="test2">フォーム表示後のボタンによる実行</div>`;
+
+        FAWindow.Show('Test', 'Title', 100, 100, '#2c3e50', '#ffffff', content, false, 400, 150);
+
+        /***
+         * 
+         * 少し遅延を入れます。(「const sleep = ms => new Promise(res => setTimeout(res, ms))」;はおすすめです。setTimeoutだけでもできるものもあります。)
+         * 処理内容によっては遅延する時間を増やさなければなりません。
+         * また、この処理はフォームが開いた後すぐに実行します。
+         * 
+         ***/
+        async function process(){
+            const Target = document.getElementById('test1');
+
+            // 要素が読み込まれているか
+            if(!Target){
+                return;
+            }
+
+            // 処理
+            const textArray = [
+                " : success! ", "please click button!"
+            ];
+            for(let i = 0;i < textArray.length;i++){
+                for(let j = 0;j < textArray[i].length;j++){
+                    await sleep(250);
+                    Target.textContent += textArray[i][j];
+                }
+            }
+        }
+
+        process();
+    }
+
+    // ボタンの処理
+    function Run() {
+        document.getElementById("test2").textContent += " : success!";
+    }
+</script>
 ```
